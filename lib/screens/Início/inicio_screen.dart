@@ -51,6 +51,91 @@ class InicioScreen extends StatelessWidget {
                   const Spacer(),
                   const Padding(
                     padding: EdgeInsets.only(right: 50),
+                    // child: GestureDetector(
+                    //   onTap: () => state is AppStateShopClosed
+                    //       ? showDialog(
+                    //           context: context,
+                    //           builder: (context) =>
+                    //               CupertinoAlertDialog(
+                    //             title: const Text(
+                    //                 'Tem certeza que deseja abrir sua loja?'),
+                    //             actions: [
+                    //               TextButton(
+                    //                   onPressed: () {
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                   child: const Text(
+                    //                     'Manter fechada',
+                    //                     style: TextStyle(
+                    //                         color: Colors.red,
+                    //                         fontWeight:
+                    //                             FontWeight.bold),
+                    //                   )),
+                    //               TextButton(
+                    //                   onPressed: () {
+                    //                     context.read<AppBloc>().add(
+                    //                         AppEventOpenRestaurant());
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                   child: const Text(
+                    //                       'Abrir minha loja',
+                    //                       style: TextStyle(
+                    //                           color: Colors.green,
+                    //                           fontWeight:
+                    //                               FontWeight.bold)))
+                    //             ],
+                    //           ),
+                    //         )
+                    //       : showDialog(
+                    //           context: context,
+                    //           builder: (context) =>
+                    //               CupertinoAlertDialog(
+                    //             title: const Text(
+                    //                 'Tem certeza que deseja Fechar sua loja?'),
+                    //             actions: [
+                    //               TextButton(
+                    //                   onPressed: () {
+                    //                     Navigator.pop(context);
+                    //                   },
+                    //                   child: const Text(
+                    //                     'Manter Aberta',
+                    //                     style: TextStyle(
+                    //                         color: Colors.red,
+                    //                         fontWeight:
+                    //                             FontWeight.bold),
+                    //                   )),
+                    //               // TextButton(
+                    //               //     onPressed: () {
+                    //               //       context.read<AppBloc>().add(
+                    //               //           AppEventCloseRestaurant());
+                    //               //       Navigator.pop(context);
+                    //               //     },
+                    //               //     child: const Text(
+                    //               //         'Fechar minha loja',
+                    //               //         style: TextStyle(
+                    //               //             color: Colors.green,
+                    //               //             fontWeight:
+                    //               //                 FontWeight.bold)))
+                    //             ],
+                    //           ),
+                    //         ),
+                    //   // child: Container(
+                    //   //   decoration: BoxDecoration(
+                    //   //       borderRadius: BorderRadius.circular(15),
+                    //   //       color: state is AppStateShopClosed
+                    //   //           ? Colors.red
+                    //   //           : Colors.green),
+                    //   //   padding: const EdgeInsets.all(20),
+                    //   //   child: Text(
+                    //   //     state is AppStateShopClosed
+                    //   //         ? 'Loja Fechada'
+                    //   //         : 'Loja aberta',
+                    //   //     style: const TextStyle(
+                    //   //         color: Colors.white,
+                    //   //         fontWeight: FontWeight.bold),
+                    //   //   ),
+                    //   // ),
+                    // ),
                   ),
                 ],
               )),
