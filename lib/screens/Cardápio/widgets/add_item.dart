@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-
 class AddItemScreen extends StatefulWidget {
   const AddItemScreen({
     Key? key,
@@ -180,6 +179,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               child: MaterialButton(
                                 onPressed: () {
                                   context.read<AppBloc>().add(AppEventAddItems(
+                                      paused: false,
                                       image: imgbbResponse?.data.displayUrl,
                                       name: addItemNameController.text,
                                       price: addItemPriceController.text,

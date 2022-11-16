@@ -10,10 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-
-
 class EditItemScreen extends StatefulWidget {
   const EditItemScreen({
+    required this.paused,
     required this.id,
     required this.price,
     required this.name,
@@ -21,6 +20,7 @@ class EditItemScreen extends StatefulWidget {
     required this.description,
     Key? key,
   }) : super(key: key);
+  final bool paused;
   final String id;
   final String name;
   final String image;
@@ -88,7 +88,8 @@ class _EditItemScreenState extends State<EditItemScreen> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: uploadingImage
-                                ? const Center(child: CircularProgressIndicator())
+                                ? const Center(
+                                    child: CircularProgressIndicator())
                                 : Image.network(
                                     imgbbResponse?.data.displayUrl ??
                                         widget.image,
@@ -217,6 +218,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onPressed: () {
                                       context.read<AppBloc>().add(
                                           AppEventEditItem(
+                                              paused: widget.paused,
                                               id: widget.id,
                                               image: imgbbResponse
                                                       ?.data.displayUrl ??

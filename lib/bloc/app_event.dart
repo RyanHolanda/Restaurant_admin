@@ -35,18 +35,26 @@ class AppEventOpenAddItemsMenu extends AppEvent {
 }
 
 @immutable
+class AppEventCloseOpenStore extends AppEvent {
+  @override
+  List<Object?> get props => throw UnimplementedError();
+}
+
+@immutable
 class AppEventAddItems extends AppEvent {
   final String name;
   final String price;
   final String description;
   final String? image;
+  final bool paused;
   const AppEventAddItems(
       {required this.name,
+      required this.paused,
       required this.description,
       required this.price,
       this.image});
   @override
-  List<Object?> get props => [name, description, price, image];
+  List<Object?> get props => [name, description, price, image, paused];
 }
 
 @immutable
@@ -65,8 +73,9 @@ class AppEventEditItem extends AppEvent {
   final String? price;
   final String? image;
   final String? description;
+  final bool? paused;
   const AppEventEditItem(
-      {required this.id, this.description, this.image, this.name, this.price});
+      {required this.id, this.description, this.image, this.name, this.price, this.paused});
   @override
-  List<Object?> get props => [id, image, name, price, description];
+  List<Object?> get props => [id, image, name, price, description, paused];
 }

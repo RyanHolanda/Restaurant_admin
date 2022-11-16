@@ -1,8 +1,12 @@
 import 'package:admin_panel/bloc/app_bloc.dart';
+import 'package:admin_panel/repos/store_status_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
+
+import '../../../models/store_status_model.dart';
+
 
 // ignore: must_be_immutable
 class LeftSide extends StatelessWidget {
@@ -225,89 +229,26 @@ class LeftSide extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 25),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: const SizedBox(
+                            child: SizedBox(
                               width: 150,
                               height: 50,
-                              // child: MaterialButton(
-                              //   color: state is AppStateShopClosed
-                              //       ? Colors.green
-                              //       : Colors.red,
-                              //   onPressed: () {
-                              //     state is AppStateShopClosed
-                              //         ? showDialog(
-                              //             context: context,
-                              //             builder: (context) =>
-                              //                 CupertinoAlertDialog(
-                              //               title: const Text(
-                              //                   'Tem certeza que deseja abrir sua loja?'),
-                              //               actions: [
-                              //                 TextButton(
-                              //                     onPressed: () {
-                              //                       Navigator.pop(context);
-                              //                     },
-                              //                     child: const Text(
-                              //                       'Manter fechada',
-                              //                       style: TextStyle(
-                              //                           color: Colors.red,
-                              //                           fontWeight:
-                              //                               FontWeight.bold),
-                              //                     )),
-                              //                 TextButton(
-                              //                     onPressed: () {
-                              //                       context.read<AppBloc>().add(
-                              //                           AppEventOpenRestaurant());
-                              //                       Navigator.pop(context);
-                              //                     },
-                              //                     child: const Text(
-                              //                         'Abrir minha loja',
-                              //                         style: TextStyle(
-                              //                             color: Colors.green,
-                              //                             fontWeight:
-                              //                                 FontWeight.bold)))
-                              //               ],
-                              //             ),
-                              //           )
-                              //         : showDialog(
-                              //             context: context,
-                              //             builder: (context) =>
-                              //                 CupertinoAlertDialog(
-                              //               title: const Text(
-                              //                   'Tem certeza que deseja Fechar sua loja?'),
-                              //               actions: [
-                              //                 TextButton(
-                              //                     onPressed: () {
-                              //                       Navigator.pop(context);
-                              //                     },
-                              //                     child: const Text(
-                              //                       'Manter Aberta',
-                              //                       style: TextStyle(
-                              //                           color: Colors.red,
-                              //                           fontWeight:
-                              //                               FontWeight.bold),
-                              //                     )),
-                              //                 TextButton(
-                              //                     onPressed: () {
-                              //                       context.read<AppBloc>().add(
-                              //                           AppEventCloseRestaurant());
-                              //                       Navigator.pop(context);
-                              //                     },
-                              //                     child: const Text(
-                              //                         'Fechar minha loja',
-                              //                         style: TextStyle(
-                              //                             color: Colors.green,
-                              //                             fontWeight:
-                              //                                 FontWeight.bold)))
-                              //               ],
-                              //             ),
-                              //           );
-                              //   },
-                              //   child: Text(
-                              //     'Abrir loja',
-                              //     style: GoogleFonts.inriaSans(
-                              //         fontWeight: FontWeight.bold,
-                              //         color: Colors.white),
-                              //   ),
-                              // ),
+                              child: MaterialButton(
+                                color:
+                                    storeStatus[0].storestatus == 'Abrir loja'
+                                        ? Colors.green
+                                        : Colors.red,
+                                onPressed: () async {
+                                  context
+                                      .read<AppBloc>()
+                                      .add(AppEventCloseOpenStore());
+                                },
+                                child: Text(
+                                  storeStatus[0].storestatus,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
                           ),
                         ),

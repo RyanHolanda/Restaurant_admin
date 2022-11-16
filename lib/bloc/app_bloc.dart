@@ -1,4 +1,7 @@
 // ignore: depend_on_referenced_packages
+import 'package:admin_panel/models/store_status_model.dart';
+import 'package:admin_panel/repos/store_status_repo.dart';
+import 'package:admin_panel/screens/Home/widgets/left_side.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +13,7 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(const AppStateIsInIncioScreen(isLoading: false)) {
     on<AppEventGoToCardapioScreen>((event, emit) async {
-      emit(const AppStateIsInCardapioScreen([], isLoading: true));
+      emit(const AppStateIsInCardapioScreen([], isLoading: false));
       try {
         final items = await ItemsRepository().getItems();
         emit(AppStateIsInCardapioScreen(items, isLoading: false));
@@ -30,8 +33,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventGetItems>((event, emit) async {
       emit(const AppStateLoadingData(isLoading: true));
+      print('trying to connect');
       try {
         await ItemsRepository().getItems();
+        final store = await StoreStatusRepositorie().getStoreStatus();
+        storeStatus = store;
         emit(const AppStateIsInIncioScreen(isLoading: false));
       } catch (e) {
         add(AppEventGetItems());
@@ -60,15 +66,29 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventEditItem>((event, emit) async {
-      emit(const AppStateLoadingData(isLoading: true));
+      emit(const AppStateIsInCardapioScreen([], isLoading: false));
       await Updateitems(
               id: event.id,
               description: event.description,
+              paused: event.paused,
               image: event.image,
               name: event.name,
               price: event.price)
           .updateitems();
       add(AppEventGoToCardapioScreen());
+    });
+
+    on<AppEventCloseOpenStore>((event, emit) async {
+      emit(AppStateLoadingData(isLoading: true));
+      await UpdateStoreStatus(
+              id: storeStatus[0].id,
+              storestatus: storeStatus[0].storestatus == 'Fechar loja'
+                  ? 'Abrir loja'
+                  : 'Fechar loja')
+          .updateitems();
+      final store = await StoreStatusRepositorie().getStoreStatus();
+      storeStatus = store;
+      emit(AppStateIsInIncioScreen(isLoading: false));
     });
   }
 }

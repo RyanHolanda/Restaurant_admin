@@ -63,7 +63,7 @@ class CardapioScreen extends StatelessWidget {
                                             .add(AppEventGoToCardapioScreen());
                                       },
                                       icon: const Icon(Bootstrap.arrow_repeat),
-                                      label: const Text('Atualizar lista')),
+                                      label: const Text('Atualizar Página')),
                                   TextButton.icon(
                                       onPressed: () {
                                         context

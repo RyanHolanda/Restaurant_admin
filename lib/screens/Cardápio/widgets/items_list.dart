@@ -140,7 +140,8 @@ class Itemslist extends StatelessWidget {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   EditItemScreen(
-                                                    id: itemsList[index].id,
+                                                paused: itemsList[index].paused,
+                                                id: itemsList[index].id,
                                                 description: itemsList[index]
                                                     .description,
                                                 price: itemsList[index].price,
@@ -165,11 +166,25 @@ class Itemslist extends StatelessWidget {
                                   height: 50,
                                   child: MaterialButton(
                                       onPressed: () async {
-                                        () {};
+                                        context.read<AppBloc>().add(
+                                            AppEventEditItem(
+                                                id: itemsList[index].id,
+                                                description: itemsList[index]
+                                                    .description,
+                                                image: itemsList[index].image,
+                                                name: itemsList[index].name,
+                                                price: itemsList[index].price,
+                                                paused: itemsList[index].paused
+                                                    ? false
+                                                    : true));
                                       },
-                                      child: const Icon(
-                                        Icons.pause,
-                                        color: Colors.black,
+                                      child: Icon(
+                                        itemsList[index].paused
+                                            ? Icons.play_arrow
+                                            : Icons.pause,
+                                        color: itemsList[index].paused
+                                            ? Colors.red
+                                            : Colors.black,
                                       )),
                                 ),
                               ),
