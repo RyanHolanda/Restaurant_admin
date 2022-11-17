@@ -1,8 +1,7 @@
 // ignore: depend_on_referenced_packages
+import 'package:bloc/bloc.dart';
 import 'package:admin_panel/models/store_status_model.dart';
 import 'package:admin_panel/repos/store_status_repo.dart';
-import 'package:admin_panel/screens/Home/widgets/left_side.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:admin_panel/models/item_model.dart';
@@ -13,7 +12,7 @@ part 'app_state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(const AppStateIsInIncioScreen(isLoading: false)) {
     on<AppEventGoToCardapioScreen>((event, emit) async {
-      emit(const AppStateIsInCardapioScreen([], isLoading: false));
+      emit(const AppStateIsInCardapioScreen([], isLoading: true));
       try {
         final items = await ItemsRepository().getItems();
         emit(AppStateIsInCardapioScreen(items, isLoading: false));

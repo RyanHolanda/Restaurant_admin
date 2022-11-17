@@ -1,21 +1,17 @@
 import 'dart:io' show Platform;
-import 'package:admin_panel/screens/Home/widgets/windows_buttons.dart';
+import 'package:admin_panel/screens/Home/widgets/desktop/windows_buttons.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class InicioScreen extends StatelessWidget {
-  const InicioScreen({
+  InicioScreen({
     Key? key,
-    required ScrollController dataScrollController,
-    required ScrollController historicScrollController,
-  })  : _dataScrollController = dataScrollController,
-        _historicScrollController = historicScrollController,
-        super(key: key);
+  }) : super(key: key);
 
-  final ScrollController _dataScrollController;
-  final ScrollController _historicScrollController;
+  final ScrollController _dataScrollController = ScrollController();
+  final ScrollController _historicScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {

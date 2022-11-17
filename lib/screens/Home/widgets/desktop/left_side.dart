@@ -1,11 +1,10 @@
 import 'package:admin_panel/bloc/app_bloc.dart';
-import 'package:admin_panel/repos/store_status_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../models/store_status_model.dart';
+import 'package:admin_panel/models/store_status_model.dart';
 
 
 // ignore: must_be_immutable
