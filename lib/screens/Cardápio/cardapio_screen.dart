@@ -43,7 +43,7 @@ class CardapioScreen extends StatelessWidget {
                                 Platform.isLinux
                             ? const EdgeInsets.only(
                                 left: 50, bottom: 50, top: 20)
-                            : const EdgeInsets.all(15),
+                            : const EdgeInsets.all(20),
                         child: Row(
                           children: [
                             const Icon(

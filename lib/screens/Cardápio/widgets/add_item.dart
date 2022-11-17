@@ -64,137 +64,140 @@ class _AddItemScreenState extends State<AddItemScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        return Center(
-          child: SizedBox(
-            height: 600,
-            width: 700,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 50, bottom: 20, left: 50, right: 50),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        BoxIcons.bx_menu_alt_left,
-                        color: Colors.black,
-                        size: 28,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        'Adicionar Item ao cardápio',
-                        style: GoogleFonts.inriaSans(fontSize: 28),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  TextField(
-                    controller: addItemNameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        label: Text('Nome')),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    controller: addItemDescriptionController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        label: Text('Descrição')),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    controller: addItemPriceController,
-                    decoration: const InputDecoration(
-                        prefixText: r'R$',
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        label: Text('Preço (Digite somente números)')),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton.icon(
-                          onPressed: () async {
-                            FilePickerResult? result;
-                            result = await FilePicker.platform.pickFiles();
-                            setState(() {
-                              theImage = File(result!.files.first.path!);
-                              txt = (result.files.first.name);
-                            });
-                            uploadImageFile(theImage!);
-                          },
-                          icon: const Icon(Icons.add),
-                          label: Text(txt))),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius: BorderRadius.circular(15)),
-                        width: 250,
-                        height: 50,
-                        child: MaterialButton(
-                          onPressed: () {
-                            context
-                                .read<AppBloc>()
-                                .add(AppEventGoToCardapioScreen());
-                          },
-                          child: const Text('Cancelar'),
+        return SingleChildScrollView(
+          child: SafeArea(
+            child: Center(
+              child: Padding(
+                padding: Platform.isWindows || Platform.isLinux || Platform.isMacOS ? const EdgeInsets.only(
+                    top: 50, bottom: 20, left: 50, right: 50) : const EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? const Icon(
+                          BoxIcons.bx_menu_alt_left,
+                          color: Colors.black,
+                          size: 28,
+                        ) : IconButton(onPressed: () => context.read<AppBloc>().add(AppEventGoToCardapioScreen()), icon: const Icon(Icons.arrow_back_ios_rounded)) ,
+                        const SizedBox(
+                          width: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      state.isLoading || uploadingImage
-                          ? const CircularProgressIndicator()
-                          : Container(
-                              width: 250,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.black,
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  context.read<AppBloc>().add(AppEventAddItems(
-                                      paused: false,
-                                      image: imgbbResponse?.data.displayUrl,
-                                      name: addItemNameController.text,
-                                      price: addItemPriceController.text,
-                                      description:
-                                          addItemDescriptionController.text));
-                                },
-                                child: const Text(
-                                  'Adicionar',
-                                  style: TextStyle(color: Colors.white),
+                        Text(
+                          'Adicionar Item',
+                          style: GoogleFonts.inriaSans(fontSize: 28),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    TextField(
+                      controller: addItemNameController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          label: Text('Nome')),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: addItemDescriptionController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          label: Text('Descrição')),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: addItemPriceController,
+                      decoration: const InputDecoration(
+                          prefixText: r'R$',
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          label: Text('Preço (Digite somente números)')),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                            onPressed: () async {
+                              FilePickerResult? result;
+                              result = await FilePicker.platform.pickFiles();
+                              setState(() {
+                                theImage = File(result!.files.first.path!);
+                                txt = (result.files.first.name);
+                              });
+                              uploadImageFile(theImage!);
+                            },
+                            icon: const Icon(Icons.add),
+                            label: Text(txt))),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          width: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 250 : 150,
+                          height: 50,
+                          child: MaterialButton(
+                            onPressed: () {
+                              context
+                                  .read<AppBloc>()
+                                  .add(AppEventGoToCardapioScreen());
+                            },
+                            child: const Text('Cancelar'),
+                          ),
+                        ) : const SizedBox.shrink(),
+                        SizedBox(
+                          width: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 50 : 0,
+                        ),
+                        state.isLoading || uploadingImage
+                            ? const CircularProgressIndicator()
+                            : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                  width: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 250 : MediaQuery.of(context).size.width - 46,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.black,
+                                  ),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      context.read<AppBloc>().add(AppEventAddItems(
+                                          paused: false,
+                                          image: imgbbResponse?.data.displayUrl,
+                                          name: addItemNameController.text,
+                                          price: addItemPriceController.text,
+                                          description:
+                                              addItemDescriptionController.text));
+                                    },
+                                    child: const Text(
+                                      'Adicionar',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
-                              ),
                             )
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -203,5 +206,3 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 }
-
-const imageString = 'https://imgur.com/4NH3806.png';

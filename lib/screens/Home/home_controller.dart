@@ -63,6 +63,7 @@ class HomeScreen extends StatelessWidget {
             state is AppStateAddItemMenu ||
             state is AppStateIsInCardapioScreen) {
           return Scaffold(
+            bottomNavigationBar: Platform.isAndroid || Platform.isIOS ?  const BottomnavBar() : null,
             backgroundColor: Colors.white,
             body: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -80,8 +81,6 @@ class HomeScreen extends StatelessWidget {
                   return Column(
                     children: const [
                       AboveBottomBarDisplay(),
-                      Spacer(),
-                      BottomnavBar()
                     ],
                   );
                 }
