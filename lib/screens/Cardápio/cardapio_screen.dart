@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:admin_panel/bloc/app_bloc.dart';
-import 'package:admin_panel/screens/Home/widgets/windows_buttons.dart';
+import 'package:admin_panel/screens/Home/widgets/desktop/windows_buttons.dart';
 import 'package:admin_panel/screens/Cardápio/widgets/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -17,70 +19,90 @@ class CardapioScreen extends StatelessWidget {
       builder: (context, state) {
         return state.isLoading
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: Center(child: CircularProgressIndicator()),
               )
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    WindowTitleBarBox(
-                      child: Row(
-                        children: const [
-                          Expanded(
-                            child: SizedBox.shrink(),
-                          ),
-                          WindowButtons()
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 50, bottom: 50, top: 20),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            BoxIcons.bx_menu_alt_left,
-                            color: Colors.black,
-                            size: 28,
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Cardápio',
-                            style: GoogleFonts.inriaSans(fontSize: 28),
-                          ),
-                          const Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 50),
-                            child: BlocProvider(
-                              create: (context) => AppBloc(),
+            : SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Platform.isWindows || Platform.isLinux || Platform.isMacOS
+                          ? WindowTitleBarBox(
                               child: Row(
-                                children: [
-                                  TextButton.icon(
-                                      onPressed: () {
-                                        context
-                                            .read<AppBloc>()
-                                            .add(AppEventGoToCardapioScreen());
-                                      },
-                                      icon: const Icon(Bootstrap.arrow_repeat),
-                                      label: const Text('Atualizar lista')),
-                                  TextButton.icon(
-                                      onPressed: () {
-                                        context
-                                            .read<AppBloc>()
-                                            .add(AppEventOpenAddItemsMenu());
-                                      },
-                                      icon: const Icon(Icons.add),
-                                      label: const Text('Adicionar Item')),
+                                children: const [
+                                  Expanded(
+                                    child: SizedBox.shrink(),
+                                  ),
+                                  WindowButtons()
                                 ],
                               ),
+                            )
+                          : SizedBox.shrink(),
+                      Padding(
+                        padding: Platform.isWindows ||
+                                Platform.isMacOS ||
+                                Platform.isLinux
+                            ? const EdgeInsets.only(
+                                left: 50, bottom: 50, top: 20)
+                            : const EdgeInsets.all(20),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              BoxIcons.bx_menu_alt_left,
+                              color: Colors.black,
+                              size: 28,
                             ),
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              'Cardápio',
+                              style: GoogleFonts.inriaSans(fontSize: 28),
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: Platform.isWindows
+                               || Platform.isLinux || Platform.isMacOS ? const EdgeInsets.only(right: 50) : const EdgeInsets.all(0),
+                              child: BlocProvider(
+                                create: (context) => AppBloc(),
+                                child: Platform.isWindows ||
+                                        Platform.isLinux ||
+                                        Platform.isMacOS
+                                    ? Row(
+                                        children: [
+                                          TextButton.icon(
+                                              onPressed: () {
+                                                context.read<AppBloc>().add(
+                                                    AppEventGoToCardapioScreen());
+                                              },
+                                              icon: const Icon(
+                                                  Bootstrap.arrow_repeat),
+                                              label: const Text(
+                                                  'Atualizar Página')),
+                                          TextButton.icon(
+                                              onPressed: () {
+                                                context.read<AppBloc>().add(
+                                                    AppEventOpenAddItemsMenu());
+                                              },
+                                              icon: const Icon(Icons.add),
+                                              label:
+                                                  const Text('Adicionar Item')),
+                                        ],
+                                      )
+                                    : IconButton(
+                                        onPressed: () {
+                                          context
+                                              .read<AppBloc>()
+                                              .add(AppEventOpenAddItemsMenu());
+                                        },
+                                        icon: const Icon(Icons.add)),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Itemslist()
-                  ],
+                      const Itemslist()
+                    ],
+                  ),
                 ),
               );
       },

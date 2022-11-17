@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:admin_panel/models/item_model.dart';
 
 class ItemsRepository {
-  String url = 'http://localhost:8080/';
+  String url = 'https://blackbeard-api.herokuapp.com/items';
   Future<List<ItemModel>> getItems() async {
     try {
       final response = await http.get(Uri.parse(url));
@@ -18,13 +18,16 @@ class ItemsRepository {
         throw Exception(response.reasonPhrase);
       }
     } catch (e) {
+      print(e);
+      print('Trying to connect items');
+      
       return ItemsRepository().getItems();
     }
   }
 }
 
 class AddItems {
-  String postUrl = 'http://localhost:8080/create';
+  String postUrl = 'https://blackbeard-api.herokuapp.com/create/item';
   String? name;
   String? price;
   String? description;
@@ -58,7 +61,7 @@ class AddItems {
 }
 
 class Deleteitems {
-  String postUrl = 'http://localhost:8080/delete';
+  String postUrl = 'https://blackbeard-api.herokuapp.com/delete/item';
   String id;
 
   Deleteitems({required this.id});
@@ -74,15 +77,21 @@ class Deleteitems {
 }
 
 class Updateitems {
-  String postUrl = 'http://localhost:8080/update';
+  String postUrl = 'https://blackbeard-api.herokuapp.com/update/item';
   String id;
   String? name;
   String? price;
   String? description;
   String? image;
+  bool? paused;
 
   Updateitems(
-      {required this.id, this.description, this.image, this.name, this.price});
+      {required this.id,
+      this.description,
+      this.image,
+      this.name,
+      this.price,
+      this.paused});
 
   updateitems() async {
     try {
@@ -93,7 +102,7 @@ class Updateitems {
             "price": price,
             "description": description,
             "image": image,
-            "paused": false
+            "paused": paused
           }),
           headers: _setHeaders());
     } catch (e) {
@@ -109,5 +118,3 @@ _setHeaders() => {
       'Content-type': 'application/json',
       'Aceept': 'application/json',
     };
-
-

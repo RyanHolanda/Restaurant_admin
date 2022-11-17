@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:admin_panel/bloc/app_bloc.dart';
-import 'package:admin_panel/screens/Home/widgets/windows_buttons.dart';
+import 'package:admin_panel/screens/Home/widgets/desktop/windows_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +27,7 @@ class PedidosScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Platform.isWindows?
                     WindowTitleBarBox(
                       child: Row(
                         children: const [
@@ -34,7 +37,7 @@ class PedidosScreen extends StatelessWidget {
                           WindowButtons()
                         ],
                       ),
-                    ),
+                    ) : SizedBox.shrink(),
                     Padding(
                       padding: const EdgeInsets.only(left: 50, bottom: 50, top: 20),
                       child: Row(

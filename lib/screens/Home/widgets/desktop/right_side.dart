@@ -10,10 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RightSide extends StatelessWidget {
   RightSide({super.key});
 
-  final ScrollController _dataScrollController = ScrollController();
-
-  final ScrollController _historicScrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -25,9 +21,7 @@ class RightSide extends StatelessWidget {
             child: BlocBuilder<AppBloc, AppState>(
               builder: (context, state) {
                 if (state is AppStateIsInIncioScreen) {
-                  return InicioScreen(
-                      dataScrollController: _dataScrollController,
-                      historicScrollController: _historicScrollController);
+                  return InicioScreen();
                 }
                 if (state is AppStateIsInCardapioScreen) {
                   return const CardapioScreen();
