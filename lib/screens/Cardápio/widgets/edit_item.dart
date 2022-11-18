@@ -6,6 +6,7 @@ import 'package:admin_panel/models/upload_image_model.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -76,175 +77,224 @@ class _EditItemScreenState extends State<EditItemScreen> {
       child: BlocBuilder<AppBloc, AppState>(
         builder: (context, state) {
           return Scaffold(
-            body: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 50, bottom: 20, left: 50, right: 50),
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: uploadingImage
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : Image.network(
-                                    imgbbResponse?.data.displayUrl ??
-                                        widget.image,
-                                    height:
-                                        MediaQuery.of(context).size.height / 2,
-                                    width: MediaQuery.of(context).size.width,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(25),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  BoxIcons.bx_menu_alt_left,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  'Editar Item: ${widget.name}',
-                                  style: GoogleFonts.inriaSans(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(25),
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: TextButton.icon(
-                                  onPressed: () async {
-                                    FilePickerResult? result;
-                                    result =
-                                        await FilePicker.platform.pickFiles();
-                                    setState(() {
-                                      theImage =
-                                          File(result!.files.first.path!);
-                                    });
-
-                                    uploadImageFile(theImage!);
-                                  },
-                                  icon: const Icon(Icons.add),
-                                  label: const Text('Alterar imagem')),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      TextField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          hintText: widget.name,
-                          border: const UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        controller: descriptionController,
-                        decoration: InputDecoration(
-                          hintText: widget.description,
-                          border: const UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        controller: priceController,
-                        decoration: InputDecoration(
-                          hintText: widget.price,
-                          prefixText: r'R$',
-                          border: const UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 1),
-                                borderRadius: BorderRadius.circular(15)),
-                            width: 250,
-                            height: 50,
-                            child: MaterialButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancelar'),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 50,
-                          ),
-                          uploadingImage
-                              ? const CircularProgressIndicator()
-                              : Container(
-                                  width: 250,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.black,
-                                  ),
-                                  child: MaterialButton(
-                                    onPressed: () {
-                                      context.read<AppBloc>().add(
-                                          AppEventEditItem(
-                                              paused: widget.paused,
-                                              id: widget.id,
-                                              image: imgbbResponse
-                                                      ?.data.displayUrl ??
-                                                  widget.image,
-                                              description: descriptionController
-                                                          ?.text ==
-                                                      ''
-                                                  ? widget.description
-                                                  : descriptionController?.text,
-                                              name: nameController?.text == ''
-                                                  ? widget.name
-                                                  : nameController?.text,
-                                              price: priceController?.text == ''
-                                                  ? widget.price
-                                                  : priceController?.text));
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Atualizar',
-                                      style: TextStyle(color: Colors.white),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: Platform.isMacOS ||
+                            Platform.isWindows ||
+                            Platform.isLinux
+                        ? const EdgeInsets.only(
+                            top: 50, bottom: 20, left: 50, right: 50)
+                        : const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: uploadingImage
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
+                                  : Image.network(
+                                      imgbbResponse?.data.displayUrl ??
+                                          widget.image,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              2,
+                                      width: MediaQuery.of(context).size.width,
+                                      fit: BoxFit.cover,
                                     ),
+                            ),
+                            Padding(
+                              padding: Platform.isMacOS ||
+                                      Platform.isWindows ||
+                                      Platform.isLinux
+                                  ? const EdgeInsets.all(25)
+                                  : const EdgeInsets.all(10),
+                              child: Row(
+                                children: [
+                                  Platform.isMacOS ||
+                                          Platform.isWindows ||
+                                          Platform.isLinux
+                                      ? const Icon(
+                                          BoxIcons.bx_menu_alt_left,
+                                          color: Colors.white,
+                                          size: 28,
+                                        )
+                                      : IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_back_ios_new,
+                                            color: Colors.white,
+                                          )),
+                                  Platform.isMacOS ||
+                                          Platform.isWindows ||
+                                          Platform.isLinux
+                                      ? const SizedBox(
+                                          width: 20,
+                                        )
+                                      : const SizedBox.shrink(),
+                                  Text(
+                                    'Editar Item:',
+                                    style: GoogleFonts.inriaSans(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
                                   ),
-                                )
-                        ],
-                      ),
-                    ],
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height / 2.3,
+                                  right: 20),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: TextButton.icon(
+                                    onPressed: () async {
+                                      FilePickerResult? result;
+                                      result =
+                                          await FilePicker.platform.pickFiles();
+                                      setState(() {
+                                        theImage =
+                                            File(result!.files.first.path!);
+                                      });
+
+                                      uploadImageFile(theImage!);
+                                    },
+                                    icon: const Icon(Icons.add),
+                                    label: const Text('Alterar imagem')),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            hintText: widget.name,
+                            border: const UnderlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                          controller: descriptionController,
+                          decoration: InputDecoration(
+                            hintText: widget.description,
+                            border: const UnderlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                          keyboardType: TextInputType.number,
+                          controller: priceController,
+                          inputFormatters: [
+                            TextInputFormatter.withFunction(
+                          (oldValue, newValue) => newValue.copyWith(
+                            text: newValue.text.replaceAll('.', ','),
+                          ),
+                        ),
+                          ],
+                          decoration: InputDecoration(
+                            hintText: widget.price,
+                             prefixText: '',
+                            
+                            border: const UnderlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                            ),
+                          ),
+                        ),
+                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? const SizedBox(
+                          height: 20,
+                        ) : SizedBox(height: 40,),
+                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? const SizedBox(
+                          height: 50,
+                        ) : const SizedBox.shrink(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Platform.isMacOS ||
+                                    Platform.isWindows ||
+                                    Platform.isLinux
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    width: 250,
+                                    height: 50,
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancelar'),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            Platform.isMacOS ||
+                                    Platform.isWindows ||
+                                    Platform.isLinux
+                                ? const SizedBox(
+                                    width: 50,
+                                  )
+                                : const SizedBox.shrink(),
+                            uploadingImage
+                                ? const CircularProgressIndicator()
+                                : Container(
+                                    width: 250,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.black,
+                                    ),
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        context.read<AppBloc>().add(
+                                            AppEventEditItem(
+                                                paused: widget.paused,
+                                                id: widget.id,
+                                                image: imgbbResponse
+                                                        ?.data.displayUrl ??
+                                                    widget.image,
+                                                description:
+                                                    descriptionController
+                                                                ?.text ==
+                                                            ''
+                                                        ? widget.description
+                                                        : descriptionController
+                                                            ?.text,
+                                                name: nameController?.text == ''
+                                                    ? widget.name
+                                                    : nameController?.text,
+                                                price: priceController?.text ==
+                                                        ''
+                                                    ? widget.price
+                                                    : priceController?.text));
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        'Atualizar',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

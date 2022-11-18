@@ -40,7 +40,7 @@ class InicioScreen extends StatelessWidget {
                 padding:
                     Platform.isMacOS || Platform.isWindows || Platform.isLinux
                         ? const EdgeInsets.only(left: 50, bottom: 50, top: 20)
-                        : const EdgeInsets.all(20),
+                        : const EdgeInsets.all(19),
                 child: Row(
                   children: [
                     const Icon(BoxIcons.bx_menu_alt_left,
@@ -60,7 +60,7 @@ class InicioScreen extends StatelessWidget {
                         ? ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: SizedBox(
-                            width: 120  ,
+                            width: 102,
                             height: 50,
                             child: MaterialButton(
                               color:
@@ -288,7 +288,7 @@ class InicioScreen extends StatelessWidget {
                             Text(
                               'Dados dos últimos 30 dias',
                               style: GoogleFonts.inriaSans(
-                                  fontSize: 25,
+                                  fontSize: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 25 : 22,
                                   color: Colors.grey.shade700,
                                   fontWeight: FontWeight.bold),
                             ),

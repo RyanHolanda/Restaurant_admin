@@ -9,9 +9,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'edit_item.dart';
 
 class Itemslist extends StatelessWidget {
-  const Itemslist({
+   Itemslist({
+    required this.scrollController,
     Key? key,
   }) : super(key: key);
+
+  ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,7 @@ class Itemslist extends StatelessWidget {
           return state.isLoading
               ? const CircularProgressIndicator()
               : ListView.builder(
+                controller: scrollController,
                   shrinkWrap: true,
                   itemCount: itemsList.length,
                   itemBuilder: (context, index) => Column(

@@ -24,7 +24,7 @@ class RightSide extends StatelessWidget {
                   return InicioScreen();
                 }
                 if (state is AppStateIsInCardapioScreen) {
-                  return const CardapioScreen();
+                  return CardapioScreen();
                 }
 
                 if (state is AppStateIsInPedidosScreen) {

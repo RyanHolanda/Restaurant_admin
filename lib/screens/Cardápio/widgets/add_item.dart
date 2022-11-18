@@ -6,6 +6,7 @@ import 'package:admin_panel/models/upload_image_model.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -68,17 +69,28 @@ class _AddItemScreenState extends State<AddItemScreen> {
           child: SafeArea(
             child: Center(
               child: Padding(
-                padding: Platform.isWindows || Platform.isLinux || Platform.isMacOS ? const EdgeInsets.only(
-                    top: 50, bottom: 20, left: 50, right: 50) : const EdgeInsets.all(15),
+                padding:
+                    Platform.isWindows || Platform.isLinux || Platform.isMacOS
+                        ? const EdgeInsets.only(
+                            top: 50, bottom: 20, left: 50, right: 50)
+                        : const EdgeInsets.all(15),
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? const Icon(
-                          BoxIcons.bx_menu_alt_left,
-                          color: Colors.black,
-                          size: 28,
-                        ) : IconButton(onPressed: () => context.read<AppBloc>().add(AppEventGoToCardapioScreen()), icon: const Icon(Icons.arrow_back_ios_rounded)) ,
+                        Platform.isMacOS ||
+                                Platform.isWindows ||
+                                Platform.isLinux
+                            ? const Icon(
+                                BoxIcons.bx_menu_alt_left,
+                                color: Colors.black,
+                                size: 28,
+                              )
+                            : IconButton(
+                                onPressed: () => context
+                                    .read<AppBloc>()
+                                    .add(AppEventGoToCardapioScreen()),
+                                icon: const Icon(Icons.arrow_back_ios_rounded)),
                         const SizedBox(
                           width: 20,
                         ),
@@ -116,6 +128,15 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       height: 20,
                     ),
                     TextField(
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        TextInputFormatter.withFunction(
+                          (oldValue, newValue) => newValue.copyWith(
+                            text: newValue.text.replaceAll('.', ','),
+                          ),
+                        ),
+                      ],
                       controller: addItemPriceController,
                       decoration: const InputDecoration(
                           prefixText: r'R$',
@@ -148,30 +169,46 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1),
-                              borderRadius: BorderRadius.circular(15)),
-                          width: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 250 : 150,
-                          height: 50,
-                          child: MaterialButton(
-                            onPressed: () {
-                              context
-                                  .read<AppBloc>()
-                                  .add(AppEventGoToCardapioScreen());
-                            },
-                            child: const Text('Cancelar'),
-                          ),
-                        ) : const SizedBox.shrink(),
+                        Platform.isMacOS ||
+                                Platform.isWindows ||
+                                Platform.isLinux
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(15)),
+                                width: Platform.isMacOS ||
+                                        Platform.isWindows ||
+                                        Platform.isLinux
+                                    ? 250
+                                    : 150,
+                                height: 50,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    context
+                                        .read<AppBloc>()
+                                        .add(AppEventGoToCardapioScreen());
+                                  },
+                                  child: const Text('Cancelar'),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                         SizedBox(
-                          width: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 50 : 0,
+                          width: Platform.isMacOS ||
+                                  Platform.isWindows ||
+                                  Platform.isLinux
+                              ? 50
+                              : 0,
                         ),
                         state.isLoading || uploadingImage
                             ? const CircularProgressIndicator()
                             : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                  width: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 250 : MediaQuery.of(context).size.width - 46,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: Platform.isMacOS ||
+                                          Platform.isWindows ||
+                                          Platform.isLinux
+                                      ? 250
+                                      : MediaQuery.of(context).size.width - 46,
                                   height: 50,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -179,13 +216,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   ),
                                   child: MaterialButton(
                                     onPressed: () {
-                                      context.read<AppBloc>().add(AppEventAddItems(
-                                          paused: false,
-                                          image: imgbbResponse?.data.displayUrl,
-                                          name: addItemNameController.text,
-                                          price: addItemPriceController.text,
-                                          description:
-                                              addItemDescriptionController.text));
+                                      context.read<AppBloc>().add(
+                                          AppEventAddItems(
+                                              paused: false,
+                                              image: imgbbResponse
+                                                  ?.data.displayUrl,
+                                              name: addItemNameController.text,
+                                              price:
+                                                  addItemPriceController.text,
+                                              description:
+                                                  addItemDescriptionController
+                                                      .text));
                                     },
                                     child: const Text(
                                       'Adicionar',
@@ -193,7 +234,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                     ),
                                   ),
                                 ),
-                            )
+                              )
                       ],
                     ),
                   ],

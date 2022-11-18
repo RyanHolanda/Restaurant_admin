@@ -11,8 +11,9 @@ import 'package:icons_plus/icons_plus.dart';
 
 @immutable
 class CardapioScreen extends StatelessWidget {
-  const CardapioScreen({super.key});
+   CardapioScreen({super.key});
 
+  ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppBloc, AppState>(
@@ -23,6 +24,8 @@ class CardapioScreen extends StatelessWidget {
               )
             : SafeArea(
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  controller: _scrollController ,
                   child: Column(
                     children: [
                       Platform.isWindows || Platform.isLinux || Platform.isMacOS
@@ -100,7 +103,10 @@ class CardapioScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Itemslist()
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Itemslist(scrollController: _scrollController,),
+                      )
                     ],
                   ),
                 ),

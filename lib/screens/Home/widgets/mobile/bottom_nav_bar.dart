@@ -1,6 +1,7 @@
 import 'package:admin_panel/bloc/app_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class BottomnavBar extends StatelessWidget {
@@ -11,9 +12,9 @@ class BottomnavBar extends StatelessWidget {
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
         return Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(0),
           color: Colors.white,
-          height: 100,
+          height: 80,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -23,10 +24,16 @@ class BottomnavBar extends StatelessWidget {
                       onPressed: () {
                         context.read<AppBloc>().add(AppEventGoToInicioScreen());
                       },
-                      icon: Icon(Bootstrap.grid)),
-                  const Text('Início'),
+                      icon: const Icon(Bootstrap.grid)),
+                  Text(
+                    'Início',
+                    style: GoogleFonts.inriaSans(
+                        fontWeight: state is AppStateIsInIncioScreen
+                            ? FontWeight.bold
+                            : null),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(7),
+                    padding: const EdgeInsets.only(top: 10),
                     child: AnimatedContainer(
                       decoration: BoxDecoration(
                           color: Colors.amber,
@@ -47,9 +54,15 @@ class BottomnavBar extends StatelessWidget {
                             .add(AppEventGoToCardapioScreen());
                       },
                       icon: const Icon(Bootstrap.journal_text)),
-                  const Text('Cardápio'),
+                  Text(
+                    'Cardápio',
+                    style: GoogleFonts.inriaSans(
+                        fontWeight: state is AppStateIsInCardapioScreen
+                            ? FontWeight.bold
+                            : null),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(7),
+                    padding: const EdgeInsets.only(top: 10),
                     child: AnimatedContainer(
                       decoration: BoxDecoration(
                           color: Colors.amber,
@@ -63,12 +76,22 @@ class BottomnavBar extends StatelessWidget {
               ),
               Column(
                 children: [
-                  IconButton(onPressed: () {
-                    context.read<AppBloc>().add(AppEventGoToPedidosScreen());
-                  }, icon: Icon(Bootstrap.bag)),
-                  const Text('Pedidos'),
+                  IconButton(
+                      onPressed: () {
+                        context
+                            .read<AppBloc>()
+                            .add(AppEventGoToPedidosScreen());
+                      },
+                      icon: Icon(Bootstrap.bag)),
+                  Text(
+                    'Pedidos',
+                    style: GoogleFonts.inriaSans(
+                        fontWeight: state is AppStateIsInPedidosScreen
+                            ? FontWeight.bold
+                            : null),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(7),
+                    padding: const EdgeInsets.only(top: 10),
                     child: AnimatedContainer(
                       decoration: BoxDecoration(
                           color: Colors.amber,
