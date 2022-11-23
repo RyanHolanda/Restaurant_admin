@@ -16,12 +16,13 @@ class StoreStatusRepositorie {
         throw Exception(response.reasonPhrase);
       }
     } catch (e) {
-      print('Trying to connect StoreStatus');
-      print(e);
       return StoreStatusRepositorie().getStoreStatus();
     }
   }
 }
+
+
+
 
 class UpdateStoreStatus {
   String postUrl = 'https://blackbeard-api.herokuapp.com/update/storestatus';
