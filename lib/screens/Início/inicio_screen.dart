@@ -26,8 +26,7 @@ class InicioScreen extends StatelessWidget {
     );
     final allOrderstotal = orderInfo.map((value) => value.price).toList();
     final totalSold = allOrderstotal.reduce((a, b) => a + b);
-    final mediumTicket =
-        allOrderstotal.reduce((a, b) => a + b / allOrderstotal.length);
+    final mediumTicket = totalSold / allOrderstotal.length;
     return SafeArea(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
