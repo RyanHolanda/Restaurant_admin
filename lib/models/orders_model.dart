@@ -4,6 +4,7 @@ class OrderModel {
   String clientPixKey;
   String clientWillPay;
   String date;
+  String clientNumber;
   bool isDelivery;
   String clientAdress;
   String items;
@@ -11,13 +12,12 @@ class OrderModel {
   String molhoOrMaionese;
   String paymentMethod;
   String wantSachets;
-  String userNumber;
   int id;
   double price;
   OrderModel({
-    required this.userNumber,
     required this.clientName,
     required this.clientPixKey,
+    required this.clientNumber,
     required this.clientWillPay,
     required this.date,
     required this.isDelivery,
@@ -33,7 +33,7 @@ class OrderModel {
 
   factory OrderModel.fromjson(Map<String, dynamic> json) {
     return OrderModel(
-        userNumber: json['user_number'],
+        clientNumber: json['client_number'],
         clientName: json['client_name'],
         clientPixKey: json['client_pix_key'],
         clientWillPay: json['client_will_pay'],

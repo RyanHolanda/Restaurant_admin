@@ -330,7 +330,7 @@ class _OrdersState extends State<Orders> {
                               focusColor: Colors.red,
                               onPressed: () {
                                 setState(() {
-                                  userNumber = orderInfo[index].userNumber;
+                                  userNumber = orderInfo[index].clientNumber;
                                   paymentMethod =
                                       orderInfo[index].paymentMethod;
                                   orderPrice = orderInfo[index].price;
@@ -376,7 +376,7 @@ class _OrdersState extends State<Orders> {
                                             style: TextStyle(
                                                 color: Colors.grey.shade500),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 10,
                                           ),
                                         ],
