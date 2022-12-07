@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:admin_panel/bloc/app_bloc.dart';
 import 'package:admin_panel/models/orders_model.dart';
 import 'package:admin_panel/models/store_status_model.dart';
-import 'package:admin_panel/repos/receive_order.dart';
+import 'package:admin_panel/repos/orders_repo.dart';
 import 'package:admin_panel/screens/Home/widgets/desktop/windows_buttons.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
@@ -273,23 +273,26 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   final player = AudioPlayer();
   ScrollController itemsScrollController = ScrollController();
+
+  Future newOrder() async {
+    final order = await ReceiveOrder().getOrders();
+    if (order.length != orderInfo.length) {
+      player.play(AssetSource('new_order.wav'));
+      setState(() {
+        orderInfo = order;
+        orderInfo.sort(
+          (a, b) => b.id.compareTo(a.id),
+        );
+      });
+    }
+  }
+
   @override
   void initState() {
     Timer.periodic(
       const Duration(minutes: 1),
       (timer) async {
-        final order = await ReceiveOrder().getOrders();
-        if (order.length != orderInfo.length) {
-          player.play(AssetSource('new_order.wav'));
-          setState(() {
-            orderInfo = order;
-            orderInfo.sort(
-              (a, b) => b.id.compareTo(a.id),
-            );
-          });
-        } else {
-          print('no new data from now ');
-        }
+        await newOrder();
       },
     );
     super.initState();
@@ -329,7 +332,7 @@ class _OrdersState extends State<Orders> {
                               focusColor: Colors.red,
                               onPressed: () {
                                 setState(() {
-                                  userNumber = orderInfo[index].clientNumber;
+                                  clientNumber = orderInfo[index].clientNumber;
                                   paymentMethod =
                                       orderInfo[index].paymentMethod;
                                   orderPrice = orderInfo[index].price;
@@ -369,7 +372,7 @@ class _OrdersState extends State<Orders> {
                                         children: [
                                           Text(
                                               'R\$ ${orderInfo[index].price.toStringAsFixed(2)}'),
-                                          Spacer(),
+                                          const Spacer(),
                                           Text(
                                             orderInfo[index].date,
                                             style: TextStyle(
@@ -395,32 +398,37 @@ class _OrdersState extends State<Orders> {
                   width: MediaQuery.of(context).size.width / 1.5,
                   padding: const EdgeInsets.all(20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            clientName ?? '',
-                            style: const TextStyle(fontSize: 25),
-                          ),
+                          clientName == null
+                              ? const SizedBox.shrink()
+                              : Text(
+                                  clientName ?? '',
+                                  style: const TextStyle(fontSize: 25),
+                                ),
                           const SizedBox(
                             width: 15,
                           ),
                           Text(date ?? ''),
                           const Spacer(),
-                          Text(
-                            'R\$ ${orderPrice?.toStringAsFixed(2) ?? ''}',
-                            style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          orderPrice == null
+                              ? const SizedBox.shrink()
+                              : Text(
+                                  'R\$ ${orderPrice?.toStringAsFixed(2) ?? ''}',
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold),
+                                ),
                         ],
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(paymentMethod == 'Cartao'
-                            ? 'Cartão(Pagar na entrega)'
+                            ? 'Cartão'
                             : paymentMethod ?? ''),
                       ),
                       isDelivery
@@ -431,35 +439,65 @@ class _OrdersState extends State<Orders> {
                                   ''),
                             )
                           : const SizedBox.shrink(),
+                      isDelivery
+                          ? const SizedBox.shrink()
+                          : const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Cliente irá retirar',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      meatPoint == null
+                          ? const SizedBox.shrink()
+                          : Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('+55 ${clientNumber ?? ''}')),
+                      meatPoint == null
+                          ? const SizedBox.shrink()
+                          : clientPixKey != ''
+                              ? Text('Chave pix do cliente: $clientPixKey')
+                              : const SizedBox.shrink(),
+                      meatPoint == null
+                          ? const SizedBox.shrink()
+                          : clientPixKey != ''
+                              ? Text('Quanto cliente irá pagar: $clientWillPay')
+                              : const SizedBox.shrink(),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 25),
                         child: Scrollbar(
                           controller: itemsScrollController,
                           thumbVisibility: true,
-                          child: ListView.builder(
-                            controller: itemsScrollController,
-                            shrinkWrap: true,
-                            itemCount: items?.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Container(
-                                  height: 70,
-                                  color: Colors.grey.shade200,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        items?[index]
-                                                .toString()
-                                                .replaceAll('[', '')
-                                                .replaceAll(']', '') ??
-                                            '',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                          child: SizedBox(
+                            height: 300,
+                            child: ListView.builder(
+                              controller: itemsScrollController,
+                              shrinkWrap: true,
+                              itemCount: items?.length ?? 0,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Container(
+                                    height: 70,
+                                    color: Colors.grey.shade200,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          items?[index]
+                                                  .toString()
+                                                  .replaceAll('[', '')
+                                                  .replaceAll(']', '') ??
+                                              '',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -468,7 +506,59 @@ class _OrdersState extends State<Orders> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              color: Colors.grey.shade200,
+                              padding: const EdgeInsets.all(15),
+                              child: wantSachets == null
+                                  ? const SizedBox.shrink()
+                                  : Text(
+                                      'Gostaria de sachês?: ${wantSachets ?? ''}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              color: Colors.grey.shade200,
+                              padding: const EdgeInsets.all(15),
+                              child: meatPoint == null
+                                  ? const SizedBox.shrink()
+                                  : Text(
+                                      'Ponto da carne: ${meatPoint ?? ''}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              color: Colors.grey.shade200,
+                              padding: const EdgeInsets.all(15),
+                              child: molhoOrMaionese == null
+                                  ? const SizedBox.shrink()
+                                  : Text(
+                                      'Molho grill ou maionese: ${molhoOrMaionese == 'nao' ? 'Não, obrigado' : molhoOrMaionese ?? ''}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -481,7 +571,7 @@ class _OrdersState extends State<Orders> {
   }
 }
 
-String? userNumber;
+String? clientNumber;
 String? clientPixKey;
 String? clientWillPay;
 String? date;

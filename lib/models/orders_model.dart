@@ -4,7 +4,6 @@ class OrderModel {
   String clientPixKey;
   String clientWillPay;
   String date;
-  String clientNumber;
   bool isDelivery;
   String clientAdress;
   String items;
@@ -12,12 +11,13 @@ class OrderModel {
   String molhoOrMaionese;
   String paymentMethod;
   String wantSachets;
+  String clientNumber;
   int id;
   double price;
   OrderModel({
+    required this.clientNumber,
     required this.clientName,
     required this.clientPixKey,
-    required this.clientNumber,
     required this.clientWillPay,
     required this.date,
     required this.isDelivery,

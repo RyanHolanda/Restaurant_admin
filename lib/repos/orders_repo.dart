@@ -12,11 +12,9 @@ class ReceiveOrder {
         final List result = jsonDecode(response.body);
         return result.map(((e) => OrderModel.fromjson(e))).toList();
       } else {
-        print('error');
         return getOrders();
       }
     } catch (e) {
-      print(e);
       return ReceiveOrder().getOrders();
     }
   }

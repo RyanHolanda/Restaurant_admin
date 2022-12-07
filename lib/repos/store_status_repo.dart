@@ -36,7 +36,7 @@ class UpdateStoreStatus {
             "id": id,
             "storestatus": storestatus,
           }),
-          headers: _setHeaders());
+          headers: setHeaders());
     } catch (e) {
       updateitems();
       if (kDebugMode) {
@@ -46,7 +46,7 @@ class UpdateStoreStatus {
   }
 }
 
-_setHeaders() => {
+setHeaders() => {
       'Content-type': 'application/json',
-      'Aceept': 'application/json',
+      'Accept': 'application/json',
     };
