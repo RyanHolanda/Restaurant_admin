@@ -10,7 +10,6 @@ class ReceiveOrder {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final List result = jsonDecode(response.body);
-        response.body;
         return result.map(((e) => OrderModel.fromjson(e))).toList();
       } else {
         print('error');
