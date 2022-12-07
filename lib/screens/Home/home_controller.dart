@@ -1,5 +1,4 @@
 import 'package:admin_panel/bloc/app_bloc.dart';
-import 'package:admin_panel/screens/Card%C3%A1pio/cardapio_screen.dart';
 import 'package:admin_panel/screens/Home/widgets/desktop/left_side.dart';
 import 'package:admin_panel/screens/Home/widgets/desktop/right_side.dart';
 import 'package:admin_panel/screens/Home/widgets/mobile/above_bottom_nav_bar.dart';
@@ -63,7 +62,9 @@ class HomeScreen extends StatelessWidget {
             state is AppStateAddItemMenu ||
             state is AppStateIsInCardapioScreen) {
           return Scaffold(
-            bottomNavigationBar: Platform.isAndroid || Platform.isIOS ?  const BottomnavBar() : null,
+            bottomNavigationBar: Platform.isAndroid || Platform.isIOS
+                ? const BottomnavBar()
+                : null,
             backgroundColor: Colors.white,
             body: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -72,8 +73,8 @@ class HomeScreen extends StatelessWidget {
                     Platform.isLinux) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const LeftSide(),
+                    children: const [
+                      LeftSide(),
                       RightSide(),
                     ],
                   );

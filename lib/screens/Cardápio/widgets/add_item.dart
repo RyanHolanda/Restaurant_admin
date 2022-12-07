@@ -129,7 +129,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
                     TextField(
                       keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
+                          const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
                         TextInputFormatter.withFunction(
                           (oldValue, newValue) => newValue.copyWith(

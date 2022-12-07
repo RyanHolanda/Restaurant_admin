@@ -6,7 +6,6 @@ import 'package:icons_plus/icons_plus.dart';
 
 import 'package:admin_panel/models/store_status_model.dart';
 
-
 // ignore: must_be_immutable
 class LeftSide extends StatelessWidget {
   const LeftSide({super.key});
@@ -136,56 +135,6 @@ class LeftSide extends StatelessWidget {
                             ),
                             const Text(
                               'Cardápio',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    child: SizedBox(
-                      height: 70,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          if (state is AppStateIsInPedidosScreen) {
-                            null;
-                          } else {
-                            context
-                                .read<AppBloc>()
-                                .add(AppEventGoToPedidosScreen());
-                          }
-                        },
-                        child: SizedBox(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            AnimatedPadding(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.only(right: 10),
-                              child: AnimatedContainer(
-                                decoration: BoxDecoration(
-                                    color: Colors.amber,
-                                    borderRadius: BorderRadius.circular(10)),
-                                duration: const Duration(milliseconds: 200),
-                                height:
-                                    state is AppStateIsInPedidosScreen ? 30 : 0,
-                                width:
-                                    state is AppStateIsInPedidosScreen ? 5 : 0,
-                              ),
-                            ),
-                            const Icon(
-                              Bootstrap.bag,
-                              color: Colors.black,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text(
-                              'Pedidos',
                               style: TextStyle(color: Colors.black),
                             ),
                           ],

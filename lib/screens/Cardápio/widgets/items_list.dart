@@ -9,12 +9,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'edit_item.dart';
 
 class Itemslist extends StatelessWidget {
-   Itemslist({
-    required this.scrollController,
+  Itemslist({
     Key? key,
   }) : super(key: key);
 
-  ScrollController scrollController;
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class Itemslist extends StatelessWidget {
           return state.isLoading
               ? const CircularProgressIndicator()
               : ListView.builder(
-                controller: scrollController,
+                  controller: scrollController,
                   shrinkWrap: true,
                   itemCount: itemsList.length,
                   itemBuilder: (context, index) => Column(
@@ -249,29 +248,31 @@ class Itemslist extends StatelessWidget {
                       Platform.isWindows || Platform.isMacOS || Platform.isMacOS
                           ? const SizedBox.shrink()
                           : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: Container(
                                 height: 50,
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1,
-                                    offset: const Offset(5, 5),
-                                    color: Colors.grey.shade200,
-                                    blurRadius: 15,
-                                  ),
-                                  BoxShadow(
-                                    spreadRadius: 1,
-                                    color: Colors.grey.shade100,
-                                    offset: const Offset(-5, -5),
-                                    blurRadius: 15,
-                                  )
-                                ],
-                                color: Colors.white),
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        spreadRadius: 1,
+                                        offset: const Offset(5, 5),
+                                        color: Colors.grey.shade200,
+                                        blurRadius: 15,
+                                      ),
+                                      BoxShadow(
+                                        spreadRadius: 1,
+                                        color: Colors.grey.shade100,
+                                        offset: const Offset(-5, -5),
+                                        blurRadius: 15,
+                                      )
+                                    ],
+                                    color: Colors.white),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     SizedBox(
                                       width: 50,
@@ -280,91 +281,76 @@ class Itemslist extends StatelessWidget {
                                           onPressed: () async {
                                             context.read<AppBloc>().add(
                                                 AppEventDeleteItem(
-                                                    id: itemsList[index]
-                                                        .id));
+                                                    id: itemsList[index].id));
                                           },
                                           child: const Icon(
                                             Icons.delete_outline,
                                             color: Colors.black,
                                           )),
                                     ),
-                                      SizedBox(
-                                        width: 50,
-                                        height: 50,
-                                        child: MaterialButton(
-                                            onPressed: () async {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditItemScreen(
-                                                      paused:
-                                                          itemsList[index]
-                                                              .paused,
-                                                      id: itemsList[index]
-                                                          .id,
-                                                      description:
-                                                          itemsList[index]
-                                                              .description,
-                                                      price:
-                                                          itemsList[index]
-                                                              .price,
-                                                      image:
-                                                          itemsList[index]
-                                                              .image,
-                                                      name: itemsList[index]
-                                                          .name,
-                                                    ),
-                                                  ));
-                                            },
-                                            child: const Icon(
-                                              Icons.mode_edit_outlined,
-                                              color: Colors.black,
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        width: 50,
-                                        height: 50,
-                                        child: MaterialButton(
-                                            onPressed: () async {
-                                              context.read<AppBloc>().add(
-                                                  AppEventEditItem(
-                                                      id: itemsList[
-                                                              index]
-                                                          .id,
-                                                      description:
-                                                          itemsList[
-                                                                  index]
-                                                              .description,
-                                                      image: itemsList[
-                                                              index]
-                                                          .image,
-                                                      name: itemsList[index]
-                                                          .name,
-                                                      price:
-                                                          itemsList[index]
-                                                              .price,
-                                                      paused:
-                                                          itemsList[index]
-                                                                  .paused
-                                                              ? false
-                                                              : true));
-                                            },
-                                            child: Icon(
-                                              itemsList[index].paused
-                                                  ? Icons.play_arrow
-                                                  : Icons.pause,
-                                              color: itemsList[index].paused
-                                                  ? Colors.red
-                                                  : Colors.black,
-                                            )),
-                                      )
-                                      
+                                    SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: MaterialButton(
+                                          onPressed: () async {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditItemScreen(
+                                                    paused:
+                                                        itemsList[index].paused,
+                                                    id: itemsList[index].id,
+                                                    description:
+                                                        itemsList[index]
+                                                            .description,
+                                                    price:
+                                                        itemsList[index].price,
+                                                    image:
+                                                        itemsList[index].image,
+                                                    name: itemsList[index].name,
+                                                  ),
+                                                ));
+                                          },
+                                          child: const Icon(
+                                            Icons.mode_edit_outlined,
+                                            color: Colors.black,
+                                          )),
+                                    ),
+                                    SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: MaterialButton(
+                                          onPressed: () async {
+                                            context.read<AppBloc>().add(
+                                                AppEventEditItem(
+                                                    id: itemsList[index].id,
+                                                    description:
+                                                        itemsList[index]
+                                                            .description,
+                                                    image:
+                                                        itemsList[index].image,
+                                                    name: itemsList[index].name,
+                                                    price:
+                                                        itemsList[index].price,
+                                                    paused:
+                                                        itemsList[index].paused
+                                                            ? false
+                                                            : true));
+                                          },
+                                          child: Icon(
+                                            itemsList[index].paused
+                                                ? Icons.play_arrow
+                                                : Icons.pause,
+                                            color: itemsList[index].paused
+                                                ? Colors.red
+                                                : Colors.black,
+                                          )),
+                                    )
                                   ],
                                 ),
                               ),
-                          ),
-                          
+                            ),
                     ],
                   ),
                 );

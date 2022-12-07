@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class StoreStatusRepositorie {
-  String url = 'https://blackbeard-api.herokuapp.com/storestatus';
+  String url = 'https://black-beard-burguer-406f0.web.app/storestatus';
   Future<List<StoreStatusModel>> getStoreStatus() async {
     try {
       final response = await http.get(Uri.parse(url));
@@ -21,11 +21,9 @@ class StoreStatusRepositorie {
   }
 }
 
-
-
-
 class UpdateStoreStatus {
-  String postUrl = 'https://blackbeard-api.herokuapp.com/update/storestatus';
+  String postUrl =
+      'https://black-beard-burguer-406f0.web.app/update/storestatus';
   String id;
   String storestatus;
 

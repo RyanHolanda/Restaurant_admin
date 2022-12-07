@@ -11,9 +11,9 @@ import 'package:icons_plus/icons_plus.dart';
 
 @immutable
 class CardapioScreen extends StatelessWidget {
-   CardapioScreen({super.key});
+  CardapioScreen({super.key});
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppBloc, AppState>(
@@ -25,7 +25,7 @@ class CardapioScreen extends StatelessWidget {
             : SafeArea(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  controller: _scrollController ,
+                  controller: _scrollController,
                   child: Column(
                     children: [
                       Platform.isWindows || Platform.isLinux || Platform.isMacOS
@@ -39,7 +39,7 @@ class CardapioScreen extends StatelessWidget {
                                 ],
                               ),
                             )
-                          : SizedBox.shrink(),
+                          : const SizedBox.shrink(),
                       Padding(
                         padding: Platform.isWindows ||
                                 Platform.isMacOS ||
@@ -63,8 +63,11 @@ class CardapioScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Padding(
-                              padding: Platform.isWindows
-                               || Platform.isLinux || Platform.isMacOS ? const EdgeInsets.only(right: 50) : const EdgeInsets.all(0),
+                              padding: Platform.isWindows ||
+                                      Platform.isLinux ||
+                                      Platform.isMacOS
+                                  ? const EdgeInsets.only(right: 50)
+                                  : const EdgeInsets.all(0),
                               child: BlocProvider(
                                 create: (context) => AppBloc(),
                                 child: Platform.isWindows ||
@@ -105,7 +108,7 @@ class CardapioScreen extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: Itemslist(scrollController: _scrollController,),
+                        child: Itemslist(),
                       )
                     ],
                   ),

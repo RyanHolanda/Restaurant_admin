@@ -1,3 +1,4 @@
+import 'package:admin_panel/bloc/Get%20Orders/get_orders_bloc.dart';
 import 'package:admin_panel/bloc/app_bloc.dart';
 import 'package:admin_panel/repos/items_repositories.dart';
 import 'package:admin_panel/screens/Home/home_controller.dart';
@@ -37,8 +38,15 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (context) => AppBloc(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AppBloc(),
+          ),
+          BlocProvider(
+            create: (context) => GetOrdersBloc(),
+          ),
+        ],
         child: RepositoryProvider(
           create: (context) => ItemsRepository(),
           child: const HomeScreen(),

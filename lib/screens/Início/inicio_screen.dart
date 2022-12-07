@@ -1,23 +1,34 @@
+import 'dart:async';
 import 'dart:io' show Platform;
+import 'dart:ui';
 import 'package:admin_panel/bloc/app_bloc.dart';
+import 'package:admin_panel/models/orders_model.dart';
 import 'package:admin_panel/models/store_status_model.dart';
+import 'package:admin_panel/repos/receive_order.dart';
 import 'package:admin_panel/screens/Home/widgets/desktop/windows_buttons.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class InicioScreen extends StatelessWidget {
   InicioScreen({
     Key? key,
   }) : super(key: key);
 
-  final ScrollController _dataScrollController = ScrollController();
-  final ScrollController _historicScrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    orderInfo.sort(
+      (a, b) => b.id.compareTo(a.id),
+    );
+    final allOrderstotal = orderInfo.map((value) => value.price).toList();
+    final totalSold = allOrderstotal.reduce((a, b) => a + b);
+    final mediumTicket =
+        allOrderstotal.reduce((a, b) => a + b / allOrderstotal.length);
     return SafeArea(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -58,29 +69,29 @@ class InicioScreen extends StatelessWidget {
                     ),
                     Platform.isAndroid || Platform.isIOS
                         ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: SizedBox(
-                            width: 102,
-                            height: 50,
-                            child: MaterialButton(
-                              color:
-                                  storeStatus[0].storestatus == 'Abrir loja'
-                                      ? Colors.green
-                                      : Colors.red,
-                              onPressed: () async {
-                                context
-                                    .read<AppBloc>()
-                                    .add(AppEventCloseOpenStore());
-                              },
-                              child: Text(
-                                storeStatus[0].storestatus,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                            borderRadius: BorderRadius.circular(12),
+                            child: SizedBox(
+                              width: 102,
+                              height: 50,
+                              child: MaterialButton(
+                                color:
+                                    storeStatus[0].storestatus == 'Abrir loja'
+                                        ? Colors.green
+                                        : Colors.red,
+                                onPressed: () async {
+                                  context
+                                      .read<AppBloc>()
+                                      .add(AppEventCloseOpenStore());
+                                },
+                                child: Text(
+                                  storeStatus[0].storestatus,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                        )
+                          )
                         : const SizedBox.shrink(),
                   ],
                 )),
@@ -107,14 +118,14 @@ class InicioScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SelectableText(
-                                  '180',
+                                  orderInfo.length.toString(),
                                   style: GoogleFonts.inriaSans(
                                       fontSize: 24,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SelectableText(
-                                  'Pedidos hoje',
+                                  'Pedidos ao total',
                                   style: GoogleFonts.inriaSans(
                                       fontSize: 20, color: Colors.white),
                                 ),
@@ -153,14 +164,14 @@ class InicioScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SelectableText(
-                                  r'R$ 340,00',
+                                  totalSold.toStringAsFixed(2),
                                   style: GoogleFonts.inriaSans(
                                       fontSize: 24,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SelectableText(
-                                  'Vendidos hoje',
+                                  'Vendidos',
                                   style: GoogleFonts.inriaSans(
                                       fontSize: 20, color: Colors.black),
                                 ),
@@ -199,7 +210,7 @@ class InicioScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SelectableText(
-                                  r'R$ 60,00',
+                                  mediumTicket.toStringAsFixed(2),
                                   style: GoogleFonts.inriaSans(
                                       fontSize: 24,
                                       color: Colors.black,
@@ -227,324 +238,261 @@ class InicioScreen extends StatelessWidget {
                           ],
                         )),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: SizedBox(
-                        width: 300,
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SelectableText(
-                                  '541',
-                                  style: GoogleFonts.inriaSans(
-                                      fontSize: 24,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SelectableText(
-                                  'Pedidos',
-                                  style: GoogleFonts.inriaSans(
-                                      fontSize: 20, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 50),
-                              child: Icon(
-                                Bootstrap.bag,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
                 ],
               ),
             ),
             Padding(
-              padding: Platform.isMacOS ||
-                      Platform.isWindows ||
-                      Platform.isLinux
-                  ? const EdgeInsets.symmetric(horizontal: 50, vertical: 30)
-                  : const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(16, 0, 0, 0),
-                    borderRadius: BorderRadius.circular(25)),
-                width: MediaQuery.of(context).size.width,
-                height: 500,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 30, bottom: 0, top: 18, right: 30),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Dados dos últimos 30 dias',
-                              style: GoogleFonts.inriaSans(
-                                  fontSize: Platform.isMacOS || Platform.isWindows || Platform.isLinux ? 25 : 22,
-                                  color: Colors.grey.shade700,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const Spacer(),
-                            Platform.isMacOS ||
-                                    Platform.isWindows ||
-                                    Platform.isLinux
-                                ? const SizedBox(
-                                    height: 15,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.blue,
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                            Platform.isMacOS ||
-                                    Platform.isWindows ||
-                                    Platform.isLinux
-                                ? Text(
-                                    'Pedidos',
-                                    style: GoogleFonts.inriaSans(
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : const SizedBox.shrink(),
-                            Platform.isMacOS ||
-                                    Platform.isWindows ||
-                                    Platform.isLinux
-                                ? const SizedBox(
-                                    width: 30,
-                                  )
-                                : const SizedBox.shrink(),
-                            Platform.isMacOS ||
-                                    Platform.isWindows ||
-                                    Platform.isLinux
-                                ? const SizedBox(
-                                    height: 15,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.amber,
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                            Platform.isMacOS ||
-                                    Platform.isWindows ||
-                                    Platform.isLinux
-                                ? Text(
-                                    'Receita',
-                                    style: GoogleFonts.inriaSans(
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : const SizedBox.shrink(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Platform.isAndroid || Platform.isIOS
-                        ? Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 30),
-                                child: Text(
-                                  'Pedidos',
-                                  style: GoogleFonts.inriaSans(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              const SizedBox(
-                                height: 15,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.blue,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              Text(
-                                'Receita',
-                                style: GoogleFonts.inriaSans(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              const SizedBox(
-                                height: 15,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.amber,
-                                ),
-                              ),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 26, right: 26),
-                      child: Scrollbar(
-                        controller: _dataScrollController,
-                        thumbVisibility: true,
-                        child: SizedBox(
-                          height: 435,
-                          width: MediaQuery.of(context).size.width,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            controller: _dataScrollController,
-                            padding: const EdgeInsets.only(
-                                left: 0, right: 0, bottom: 25),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 30,
-                            itemBuilder: (context, index) => Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Column(
-                                        children: [
-                                          Text(326.toString()),
-                                          AnimatedContainer(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.blue,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)),
-                                              height: 300,
-                                              width: 30,
-                                              duration: const Duration(
-                                                  milliseconds: 500)),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 0.5,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(r'R$' + 130.toString()),
-                                        AnimatedContainer(
-                                            decoration: BoxDecoration(
-                                                color: Colors.amber,
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            height: 250,
-                                            width: 30,
-                                            duration: const Duration(
-                                                milliseconds: 500)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  '${26}/${10}',
-                                  style: GoogleFonts.inriaSans(
-                                      color: Colors.grey.shade700,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 50),
+              padding: const EdgeInsets.only(left: 70, top: 50),
               child: Text(
-                'Histórico de pedidos',
+                'Seus Pedidos',
                 style: GoogleFonts.inriaSans(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey.shade500),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Nome',
-                    style: GoogleFonts.inriaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500),
-                  ),
-                  Text(
-                    'Items',
-                    style: GoogleFonts.inriaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500),
-                  ),
-                  Text(
-                    'data',
-                    style: GoogleFonts.inriaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500),
-                  ),
-                  Text(
-                    'Preço',
-                    style: GoogleFonts.inriaSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade500),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding:
-                  Platform.isMacOS || Platform.isWindows || Platform.isLinux
-                      ? const EdgeInsets.symmetric(horizontal: 50)
-                      : const EdgeInsets.symmetric(horizontal: 20),
-              height: 500,
-              child: Scrollbar(
-                thumbVisibility: true,
-                controller: _historicScrollController,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  controller: _historicScrollController,
-                  itemCount: 500,
-                  itemBuilder: (context, index) => Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          SizedBox(
-                            width: 75,
-                            child: Text('Arianesasas L.',
-                                maxLines: 1, overflow: TextOverflow.ellipsis),
-                          ),
-                          SizedBox(
-                              width: 100,
-                              child: SelectableText(
-                                  '1x Brutinho, 1x Coca-Cole, 1x Green Beard, 1x combo')),
-                          SelectableText('27/11/2020\n23:00'),
-                          SelectableText(r'R$ 80,00'),
-                        ],
-                      ),
-                      const Divider(),
-                    ],
-                  ),
-                ),
-              ),
-            )
+            Orders(scrollController: scrollController)
           ],
         ),
       ),
     );
   }
 }
+
+class Orders extends StatefulWidget {
+  const Orders({
+    Key? key,
+    required this.scrollController,
+  }) : super(key: key);
+
+  final ScrollController scrollController;
+
+  @override
+  State<Orders> createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+  final player = AudioPlayer();
+  ScrollController itemsScrollController = ScrollController();
+  @override
+  void initState() {
+    Timer.periodic(
+      const Duration(minutes: 1),
+      (timer) async {
+        final order = await ReceiveOrder().getOrders();
+        if (order.length != orderInfo.length) {
+          player.play(AssetSource('new_order.wav'));
+          setState(() {
+            orderInfo = order;
+            orderInfo.sort(
+              (a, b) => b.id.compareTo(a.id),
+            );
+          });
+        } else {
+          print('no new data from now ');
+        }
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, top: 20),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          padding: const EdgeInsets.all(25),
+          color: Colors.grey.withOpacity(0.05),
+          width: MediaQuery.of(context).size.width,
+          height: 700,
+          child: SelectionArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 250,
+                  child: Scrollbar(
+                    controller: widget.scrollController,
+                    thumbVisibility: true,
+                    child: ListView.builder(
+                      controller: widget.scrollController,
+                      shrinkWrap: true,
+                      itemCount: orderInfo.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            MaterialButton(
+                              focusColor: Colors.red,
+                              onPressed: () {
+                                setState(() {
+                                  userNumber = orderInfo[index].userNumber;
+                                  paymentMethod =
+                                      orderInfo[index].paymentMethod;
+                                  orderPrice = orderInfo[index].price;
+                                  clientAdress = orderInfo[index].clientAdress;
+                                  clientName = orderInfo[index].clientName;
+                                  clientWillPay =
+                                      orderInfo[index].clientWillPay;
+                                  clientPixKey = orderInfo[index].clientPixKey;
+                                  isDelivery = orderInfo[index].isDelivery;
+                                  items = orderInfo[index].items.split(',');
+                                  date = orderInfo[index].date;
+                                  meatPoint = orderInfo[index].meatPoint;
+                                  wantSachets = orderInfo[index].wantSachets;
+                                  molhoOrMaionese =
+                                      orderInfo[index].molhoOrMaionese;
+                                });
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: SizedBox(
+                                  width: 250,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '#${orderInfo[index].id}',
+                                        style: TextStyle(
+                                            color: Colors.grey.shade400),
+                                      ),
+                                      Text(orderInfo[index].clientName),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                              'R\$ ${orderInfo[index].price.toStringAsFixed(2)}'),
+                                          Spacer(),
+                                          Text(
+                                            orderInfo[index].date,
+                                            style: TextStyle(
+                                                color: Colors.grey.shade500),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            clientName ?? '',
+                            style: const TextStyle(fontSize: 25),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Text(date ?? ''),
+                          const Spacer(),
+                          Text(
+                            'R\$ ${orderPrice?.toStringAsFixed(2) ?? ''}',
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(paymentMethod == 'Cartao'
+                            ? 'Cartão(Pagar na entrega)'
+                            : paymentMethod ?? ''),
+                      ),
+                      isDelivery
+                          ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(clientAdress?.replaceAll(
+                                      'Number', 'Número') ??
+                                  ''),
+                            )
+                          : const SizedBox.shrink(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        child: Scrollbar(
+                          controller: itemsScrollController,
+                          thumbVisibility: true,
+                          child: ListView.builder(
+                            controller: itemsScrollController,
+                            shrinkWrap: true,
+                            itemCount: items?.length,
+                            itemBuilder: (BuildContext context, int index) =>
+                                Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Container(
+                                  height: 70,
+                                  color: Colors.grey.shade200,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        items?[index]
+                                                .toString()
+                                                .replaceAll('[', '')
+                                                .replaceAll(']', '') ??
+                                            '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+String? userNumber;
+String? clientPixKey;
+String? clientWillPay;
+String? date;
+bool isDelivery = true;
+String? clientAdress;
+List? items;
+String? meatPoint;
+String? molhoOrMaionese;
+String? paymentMethod;
+String? wantSachets;
+int? id;
+double? orderPrice;
+String? clientName;

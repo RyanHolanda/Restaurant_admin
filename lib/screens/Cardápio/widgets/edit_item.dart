@@ -203,26 +203,35 @@ class _EditItemScreenState extends State<EditItemScreen> {
                           controller: priceController,
                           inputFormatters: [
                             TextInputFormatter.withFunction(
-                          (oldValue, newValue) => newValue.copyWith(
-                            text: newValue.text.replaceAll('.', ','),
-                          ),
-                        ),
+                              (oldValue, newValue) => newValue.copyWith(
+                                text: newValue.text.replaceAll('.', ','),
+                              ),
+                            ),
                           ],
                           decoration: InputDecoration(
                             hintText: widget.price,
-                             prefixText: '',
-                            
+                            prefixText: '',
                             border: const UnderlineInputBorder(
                               borderSide: BorderSide(width: 1),
                             ),
                           ),
                         ),
-                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? const SizedBox(
-                          height: 20,
-                        ) : SizedBox(height: 40,),
-                        Platform.isMacOS || Platform.isWindows || Platform.isLinux ? const SizedBox(
-                          height: 50,
-                        ) : const SizedBox.shrink(),
+                        Platform.isMacOS ||
+                                Platform.isWindows ||
+                                Platform.isLinux
+                            ? const SizedBox(
+                                height: 20,
+                              )
+                            : const SizedBox(
+                                height: 40,
+                              ),
+                        Platform.isMacOS ||
+                                Platform.isWindows ||
+                                Platform.isLinux
+                            ? const SizedBox(
+                                height: 50,
+                              )
+                            : const SizedBox.shrink(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

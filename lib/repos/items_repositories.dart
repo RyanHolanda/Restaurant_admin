@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:admin_panel/models/item_model.dart';
 
 class ItemsRepository {
-  String url = 'https://blackbeard-api.herokuapp.com/items';
+  String url = 'https://black-beard-burguer-406f0.web.app/items';
   Future<List<ItemModel>> getItems() async {
     try {
       final response = await http.get(Uri.parse(url));
@@ -18,16 +18,13 @@ class ItemsRepository {
         throw Exception(response.reasonPhrase);
       }
     } catch (e) {
-      print(e);
-      print('Trying to connect items');
-      
       return ItemsRepository().getItems();
     }
   }
 }
 
 class AddItems {
-  String postUrl = 'https://blackbeard-api.herokuapp.com/create/item';
+  String postUrl = 'https://black-beard-burguer-406f0.web.app/create/item';
   String? name;
   String? price;
   String? description;
@@ -61,7 +58,7 @@ class AddItems {
 }
 
 class Deleteitems {
-  String postUrl = 'https://blackbeard-api.herokuapp.com/delete/item';
+  String postUrl = 'https://black-beard-burguer-406f0.web.app/delete/item';
   String id;
 
   Deleteitems({required this.id});
@@ -77,7 +74,7 @@ class Deleteitems {
 }
 
 class Updateitems {
-  String postUrl = 'https://blackbeard-api.herokuapp.com/update/item';
+  String postUrl = 'https://black-beard-burguer-406f0.web.app/update/item';
   String id;
   String? name;
   String? price;

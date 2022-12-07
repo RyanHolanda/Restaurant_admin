@@ -74,35 +74,6 @@ class BottomnavBar extends StatelessWidget {
                   )
                 ],
               ),
-              Column(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        context
-                            .read<AppBloc>()
-                            .add(AppEventGoToPedidosScreen());
-                      },
-                      icon: Icon(Bootstrap.bag)),
-                  Text(
-                    'Pedidos',
-                    style: GoogleFonts.inriaSans(
-                        fontWeight: state is AppStateIsInPedidosScreen
-                            ? FontWeight.bold
-                            : null),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: AnimatedContainer(
-                      decoration: BoxDecoration(
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.circular(15)),
-                      duration: const Duration(milliseconds: 200),
-                      height: state is AppStateIsInPedidosScreen ? 5 : 0,
-                      width: state is AppStateIsInPedidosScreen ? 50 : 0,
-                    ),
-                  )
-                ],
-              ),
             ],
           ),
         );

@@ -1,4 +1,6 @@
 // ignore: depend_on_referenced_packages
+import 'package:admin_panel/models/orders_model.dart';
+import 'package:admin_panel/repos/receive_order.dart';
 import 'package:bloc/bloc.dart';
 import 'package:admin_panel/models/store_status_model.dart';
 import 'package:admin_panel/repos/store_status_repo.dart';
@@ -32,9 +34,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventGetItems>((event, emit) async {
       emit(const AppStateLoadingData(isLoading: true));
-      print('trying to connect');
       try {
         await ItemsRepository().getItems();
+        final orders = await ReceiveOrder().getOrders();
+        orderInfo = orders;
         final store = await StoreStatusRepositorie().getStoreStatus();
         storeStatus = store;
         emit(const AppStateIsInIncioScreen(isLoading: false));
@@ -78,7 +81,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppEventCloseOpenStore>((event, emit) async {
-      emit(AppStateLoadingData(isLoading: true));
+      emit(const AppStateLoadingData(isLoading: true));
       await UpdateStoreStatus(
               id: storeStatus[0].id,
               storestatus: storeStatus[0].storestatus == 'Fechar loja'
@@ -87,7 +90,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           .updateitems();
       final store = await StoreStatusRepositorie().getStoreStatus();
       storeStatus = store;
-      emit(AppStateIsInIncioScreen(isLoading: false));
+      emit(const AppStateIsInIncioScreen(isLoading: false));
     });
   }
 }
