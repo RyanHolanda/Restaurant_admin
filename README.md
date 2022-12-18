@@ -1,6 +1,13 @@
-# Black Beard Burguer App
+# Black Beard Burguer Admin App
 
-This is an delivery app built to improve my flutter skils at beginning. this app has no commercial porpouses, only for study. That's my first application built in Flutter and helped me a lot to understand how it all works! you can check release section to download the app for Android devices! you can download the admin app for windows too. The admin app receive orders from delivery apps, update menu, add and remove items from menu, and close/open the restaurant!. Black Beard Burguer is a restaurant next to my house and I decided to use their logos and burgers to feel creating a real project!
+This is an delivery app built to improve my flutter skils at beginning. this app has no commercial porpouses, only for study. That's my first application built in Flutter and helped me a lot to understand how it all works! you can check restaurant_app release section to download the app for Android devices! you can download the admin app for windows too in the restaurant_admin repository. The admin app receive orders from delivery apps, update menu, add and remove items from menu, and close/open the restaurant!. Black Beard Burguer is a restaurant next to my house and I decided to use their logos and burgers to feel creating a real project!
+
+
+
+![Screenshot (11)](https://user-images.githubusercontent.com/86686024/208314704-48c4535b-f8ec-4fdf-a3a0-ed53636517d2.png)
+![Screenshot (10)](https://user-images.githubusercontent.com/86686024/208314708-97a0167f-6142-4518-a9cd-47edc35f0f68.png)
+
+
 
 # Database
 
